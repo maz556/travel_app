@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Test</title>
+    </head>
+
+    <body>
+
+        <header>
+            <div class="">
+                Logo
+            </div>
+            <div class="">
+                navigation
+            </div>
+        </header>
+
+        <main>
+            <section>
+                <form class="" onsubmit="return Main.handleSubmit(event)">
+                    <!-- <input id="source-text" type="text" name="input" value="" onblur="onBlur()" placeholder="Text to evaluate"> -->
+                    <input id="source-text" type="text" name="input" value="" placeholder="Text or url to evaluate">
+                    <input type="submit" name="" value="submit" onclick="return Main.handleSubmit(event)" onsubmit="return Main.handleSubmit(event)">
+                </form>
+            <section>
+
+            <section>
+                <strong>Form Results:</strong>
+                <div id="results">
+                    <p id="score"></p>
+                    <p id="agreement"></p>
+                    <p id="subjectivity"></p>
+                    <p id="irony"></p>
+                    <p id="confidence"></p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>
+                What are you looking at? t('o't)
+            </p>
+        </footer>
+        <script>
+            // Check that service workers are supported
+            if ('serviceWorker' in navigator) {
+                // Use the window load event to keep the page load performant
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/service-worker.js');
+                });
+            }
+        </script>
+    </body>
+</html>
