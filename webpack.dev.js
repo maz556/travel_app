@@ -1,3 +1,4 @@
+const path = require("path")
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 
@@ -10,6 +11,7 @@ module.exports = {
         minimize: false
     },
     output: {
+        path: path.resolve(__dirname, "dist-client"),
         libraryTarget: "var",
         library: "Main"
     },

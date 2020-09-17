@@ -8,7 +8,7 @@ async function handleSubmit(event) {
         alert("The submitted text is invalid! Please submit a valid text or url!")
     }
     console.log("::: Form Submitted :::")
-    const resp = await fetch("/eval", {
+    const resp = await fetch("/api/eval", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

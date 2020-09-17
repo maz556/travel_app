@@ -1,33 +1,30 @@
 {
-  "name": "evaluate-news-nlp",
+  "name": "travel-app",
   "version": "1.0.0",
   "main": "/dist-server/index.js",
   "scripts": {
     "test": "jest",
-    "start": "node dist-server/index.js",
-    "prestart": "babel src/server --out-dir dist-server",
+    "start": "node dist-server/server.js",
+    "build-server": "babel src/server --out-dir dist-server",
     "build-prod": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
     "dev-server": "webpack-dev-server  --config webpack.dev.js --open",
     "watch-server": "nodemon"
   },
-  "proxy": "http://localhost:8081",
   "keywords": [],
-  "author": "",
+  "author": "Manuel Zamora",
   "license": "ISC",
   "description": "",
   "private": "true",
-  "dependencies": {
-    "@babel/cli": "^7.11.6",
+  "dependencies": {    
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "node-fetch": "^2.6.1",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.11.6",
     "@babel/core": "^7.5.4",
     "@babel/preset-env": "^7.5.4",
     "@types/jest": "^26.0.13",
@@ -46,6 +43,8 @@
     "sass-loader": "^10.0.1",
     "style-loader": "^1.2.1",
     "terser-webpack-plugin": "^4.1.0",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5",
     "webpack-dev-server": "^3.11.0",
     "workbox-webpack-plugin": "^5.1.3"
   }

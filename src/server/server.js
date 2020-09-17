@@ -16,16 +16,16 @@ app.use(json());
 // Cors for cross origin allowance
 app.use(cors());
 
-app.use(express.static('dist'))
+// app.use(express.static('dist-client'))
 
 console.log(__dirname)
 
 config()
 const API_KEY = process.env.API_KEY
 
-app.get('/', function (_req, res) {
-    res.sendFile('dist/index.html')
-})
+// app.get('/', function (_req, res) {
+//     res.sendFile('dist-client/index.html')
+// })
 
 // designates what port the app will listen to for incoming requests
 app.listen(8081, function () {
@@ -42,7 +42,7 @@ function getApiUrl(data) {
     `&lang=en&${data.type == formTypes.URL ? "url" : "txt"}=${data.input}`;
 }
 
-app.post('/eval', async (req, res) => {
+app.post('/api/eval', async (req, res) => {
     try {
         console.log('Sending submission to MeaningCloud API...')
         const mc_resp = await fetch(getApiUrl(req.body), {

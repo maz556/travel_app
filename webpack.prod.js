@@ -1,3 +1,4 @@
+const path = require('path')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
@@ -9,6 +10,7 @@ module.exports = {
     entry: "./src/client/index.js",
     mode: "production",
     output: {
+        path: path.resolve(__dirname, "dist-client"),
         libraryTarget: "var",
         library: "Main"
     },
