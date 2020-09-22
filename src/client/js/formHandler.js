@@ -1,10 +1,13 @@
+import { checkText } from './textChecker'
+import { formTypes } from '../../server/formEnum'
+
 async function handleSubmit(event) {
     event.preventDefault()
     
     // check what text was put into the form field
     const formInput = document.getElementById('source-text').value;
-    const formType = Main.checkText(formInput);
-    if (formType == Main.formTypes.INV) {
+    const formType = checkText(formInput);
+    if (formType == formTypes.INV) {
         alert("The submitted text is invalid! Please submit a valid text or url!")
     }
     console.log("::: Form Submitted :::")

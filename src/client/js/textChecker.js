@@ -1,12 +1,14 @@
+import { formTypes } from '../../server/formEnum'
+
 function checkText(inputText) {
     console.log("::: Running checkText :::", inputText);
     if(!(inputText && /\S/.test(inputText))){
-        return Main.formTypes.INV;
+        return formTypes.INV;
     }
     if(/https?:\/\/*.*/.test(inputText)) {
-        return Main.formTypes.URL;
+        return formTypes.URL;
     }
-    return Main.formTypes.TEXT;
+    return formTypes.TEXT;
 }
 
 export { checkText }

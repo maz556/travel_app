@@ -12,9 +12,6 @@
     },
     "rules": {
     },
-    "globals": {
-        "Main": "readonly"
-    },
     "plugins": ["jest"],
     "ignorePatterns": ["dist*"]
 }
