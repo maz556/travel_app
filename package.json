@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest",
     "start": "node dist-server/server.js",
-    "build-server": "babel src/server --out-dir dist-server",
+    "build-server": "babel --out-dir dist-server ./src/server",
     "build-prod": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
     "dev-server": "webpack-dev-server  --config webpack.dev.js --open",
@@ -16,7 +16,7 @@
   "license": "ISC",
   "description": "",
   "private": "true",
-  "dependencies": {    
+  "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -32,7 +32,9 @@
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^4.2.2",
-    "eslint": "^7.8.1",
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.0.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^26.4.2",
@@ -42,6 +44,9 @@
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "sass-loader": "^10.0.1",
     "style-loader": "^1.2.1",
+    "stylelint": "^13.7.2",
+    "stylelint-config-sass-guidelines": "^7.1.0",
+    "supertest": "^5.0.0",
     "terser-webpack-plugin": "^4.1.0",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5",

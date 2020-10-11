@@ -1,8 +1,8 @@
-import { handleSubmit } from './js/formHandler'
-import './styles/resets.scss'
-import './styles/base.scss'
-import './styles/footer.scss'
-import './styles/form.scss'
-import './styles/header.scss'
+import handleSubmit from "./js/formHandler";
+import "./styles/resets.scss";
+import "./styles/base.scss";
+import "./styles/footer.scss";
+import "./styles/form.scss";
+import "./styles/header.scss";
 
-document.getElementById("submit").addEventListener("click", handleSubmit)
+document.getElementById("trip-form").onsubmit = handleSubmit;

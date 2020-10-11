@@ -1,12 +1,11 @@
-import express from 'express';
-import mockAPIResponse from './mockAPI.js';
-import fetch from 'node-fetch';
+import express from "express";
+import fetch from "node-fetch";
 import { urlencoded, json } from "body-parser";
 import cors from "cors";
-import { config } from 'dotenv';
-import { formTypes } from './formEnum';
+import { config } from "dotenv";
 
-const app = express()
+const projectData = {};
+const app = express();
 
 // Middleware
 // Here we are configuring express to use body-parser as middle-ware.
@@ -16,52 +15,117 @@ app.use(json());
 // Cors for cross origin allowance
 app.use(cors());
 
-// app.use(express.static('dist-client'))
+app.use(express.static("dist-client"));
 
-console.log(__dirname)
+console.log(__dirname);
 
-config()
-const API_KEY = process.env.API_KEY
-
-// app.get('/', function (_req, res) {
-//     res.sendFile('dist-client/index.html')
-// })
+config();
+const geoNamesUser = process.env.GEONAMES_USER;
+const weatherbitKey = process.env.WEATHERBIT_KEY;
+const pixabayKey = process.env.PIXABAY_KEY;
 
 // designates what port the app will listen to for incoming requests
-app.listen(8081, function () {
-    console.log('Example app listening on port 8081!')
-})
-
-app.get('/test', function (_req, res) {
-    console.log(formTypes.INV)
-    res.send(mockAPIResponse)
-})
-
-function getApiUrl(data) {
-    return `https://api.meaningcloud.com/sentiment-2.1?key=${API_KEY}` +
-    `&lang=en&${data.type == formTypes.URL ? "url" : "txt"}=${data.input}`;
+if (!module.parent) {
+    app.listen(8081, () => {
+        console.log("Example app listening on port 8081!");
+    });
 }
 
-app.post('/api/eval', async (req, res) => {
-    try {
-        console.log('Sending submission to MeaningCloud API...')
-        const mc_resp = await fetch(getApiUrl(req.body), {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({})
-        });
-        console.log("Response received!!")
-        const mc_json = await mc_resp.json()
-        res.send({
-            score: mc_json.score_tag,
-            agreement: mc_json.agreement,
-            subjectivity: mc_json.subjectivity,
-            irony: mc_json.irony,
-            confidence: `${mc_json.confidence}%`
-        })
-    } catch(err) {
-        res.status(500).send(err.message)
+app.get("/", (_req, res) => {
+    res.sendFile("dist-client/index.html");
+});
+
+app.get("/test", (req, res) => {
+    res.send({ msg: "This is a test response" });
+});
+
+function getGeoNamesURL(data) {
+    return "http://api.geonames.org/postalCodeSearchJSON?"
+    + `placename=${data.locationText}&country=${data.countryCode}`
+    + `&username=${geoNamesUser}&maxRows=1`;
+}
+
+function getWeatherbitURL() {
+    return "http://api.weatherbit.io/v2.0/forecast/daily?"
+    + `lat=${projectData.lat}&lon=${projectData.lng}&key=${weatherbitKey}`
+    + `&units=I&days=${projectData.daysUntil + 1}`;
+}
+
+function getPixabayURL(useCity = true) {
+    const cityQuery = useCity ? `${projectData.city}+` : "";
+    return `https://pixabay.com/api/?key=${pixabayKey}&q=${cityQuery}${projectData.region}&image_type=photo`;
+}
+
+async function pixabyGetRequest(useCity = true) {
+    console.log("Getting image results from Pixabay...");
+    const pixabayResp = await fetch(getPixabayURL(useCity));
+    console.log("Pixabay response received!\n");
+    const pixabayData = await pixabayResp.json();
+    if (pixabayData.total > 0) {
+        projectData.imageURL = pixabayData.hits[0].webformatURL;
+        return;
     }
-})
+    if (useCity) {
+        console.log(`No image results found for ${projectData.city}, ${projectData.region}!\n`
+      + `Broadening image search query to all of ${projectData.region}.`);
+        await pixabyGetRequest(false);
+    }
+}
+
+app.post("/api/makeTrip", async (req, res) => {
+    try {
+        ({
+            startDate: projectData.startDate,
+            endDate: projectData.endDate,
+            daysUntil: projectData.daysUntil,
+        } = req.body);
+        console.log("Sending submission to GeoNames API...");
+        const geoNamesResp = await fetch(getGeoNamesURL(req.body), {
+            method: "POST",
+        });
+        console.log("GeoNames response received!\n");
+        ({
+            postalCodes: {
+                0: {
+                    placeName: projectData.city,
+                    adminName1: projectData.region,
+                    countryCode: projectData.countryCode,
+                    lat: projectData.lat,
+                    lng: projectData.lng,
+                },
+            },
+        } = await geoNamesResp.json());
+    } catch (err) {
+        let msg;
+        if (err.constructor === TypeError) {
+            res.status(422);
+            msg = "No location data found by GeoNames! Ensure all informations is correct!";
+        } else {
+            res.status(500);
+            msg = err.message;
+        }
+        res.send(msg);
+        return;
+    }
+    try {
+        console.log("Getting weather data from Weatherbit...");
+        const weatherbitResp = await fetch(getWeatherbitURL());
+        console.log("Weatherbit response received!\n");
+        ({
+            data: {
+                [projectData.daysUntil]: {
+                    high_temp: projectData.highTemp,
+                    low_temp: projectData.lowTemp,
+                    weather: { description: projectData.weatherDesc },
+                },
+            },
+        } = await weatherbitResp.json());
+        await pixabyGetRequest();
+        res.send(projectData);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+});
+
+export { app as default };
