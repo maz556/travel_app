@@ -5,4 +5,8 @@ import "./styles/footer.scss";
 import "./styles/form.scss";
 import "./styles/header.scss";
 
-document.getElementById("trip-form").onsubmit = handleSubmit;
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("trip-form").onsubmit = handleSubmit;
+});
+
+export { handleSubmit as default };

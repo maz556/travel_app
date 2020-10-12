@@ -31,10 +31,6 @@ if (!module.parent) {
     });
 }
 
-app.get("/", (_req, res) => {
-    res.sendFile("dist-client/index.html");
-});
-
 app.get("/test", (req, res) => {
     res.send({ msg: "This is a test response" });
 });

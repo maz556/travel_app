@@ -1,21 +1,24 @@
 form {
+  background-color: lightgrey;
   border: 1px solid #545454;
-  border-radius: 3px;
-  padding: 40px;
+  border-radius: 8px;
+  margin: 5px;
+  padding: 20px;
 }
 
 input {
   display: block;
   line-height: 16px;
-  margin: 5px 0;
+  margin: 10px 0;
   padding: 2px 4px;
-  width: 40%;
+  width: 100%;
 }
 
 select {
   display: block;
-  margin: 5px 0;
+  margin: 10px 0;
   padding: 2px 4px;
+  width: 100%;
 }
 
 button {
